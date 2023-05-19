@@ -6,21 +6,8 @@ import { extend, useFrame } from "@react-three/fiber";
 import vertexPortal from "./shaders/vertex";
 import shaderPortal from "./shaders/fragment";
 
-const PortalMaterial = shaderMaterial(
-  {
-    uTime: 0,
-    uColorStart: new Color("#ffffff"),
-    uColorEnd: new Color("blue"),
-  },
-  vertexPortal,
-  shaderPortal
-);
-
 const Lights = () => {
-  const portalMaterial = useRef<any>();
-
   const { nodes, materials, scene } = useGLTF("models/portal.glb") as any;
-  useFrame((state, delta) => (portalMaterial.current.uTime += delta));
 
   return (
     <group dispose={null}>
@@ -44,11 +31,27 @@ const Lights = () => {
         position={nodes.Circle.position}
         rotation={nodes.Circle.rotation}
       >
-        <portalMaterial ref={portalMaterial} />
+        <PortalShaderMaterialCOmponent />
       </mesh>
     </group>
   );
 };
 
-export default Lights;
+const PortalShaderMaterialCOmponent = () => {
+  const portalMaterial = useRef<any>();
+  useFrame((state, delta) => (portalMaterial.current.uTime += delta));
+  //@ts-ignore
+  return <portalMaterial ref={portalMaterial} />;
+};
+
+const PortalMaterial = shaderMaterial(
+  {
+    uTime: 0,
+    uColorStart: new Color("#ffffff"),
+    uColorEnd: new Color("blue"),
+  },
+  vertexPortal,
+  shaderPortal
+);
 extend({ PortalMaterial });
+export default Lights;
