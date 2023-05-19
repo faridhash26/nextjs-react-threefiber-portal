@@ -15,9 +15,6 @@ import Lights from "./Lights";
 const SceneRenderer = ({
   scale = Array.from({ length: 50 }, () => 0.5 + Math.random() * 4),
 }) => {
-  const { nodes, materials } = useGLTF("models/portal.glb") as any;
-  console.log("nodes", nodes);
-
   return (
     <Canvas camera={{ fov: 45, position: [4, 2, 4] }}>
       <color args={["#201919"]} attach={"background"} />
